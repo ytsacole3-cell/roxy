@@ -1,39 +1,70 @@
 # Roxy AI ❤️
 
-Roxy é uma assistente virtual em desenvolvimento, com interface acolhedora, coração animado e conversa por texto e voz.
+Roxy é uma assistente virtual em desenvolvimento, com interface React, conversa por texto, reconhecimento de voz e síntese de fala no navegador.
 
-## Estado atual
+## Estado desta versão
+
 - [x] Interface responsiva em React + TypeScript
-- [x] Coração animado e personalidade visual
-- [x] Chat demonstrativo com respostas locais
-- [x] Síntese de voz do navegador, quando disponível
-- [x] Reconhecimento de voz do navegador, quando disponível
-- [ ] Conectar modelo de IA por backend seguro
+- [x] Chat conectado ao backend local
+- [x] Backend Node/Express com validação e timeout
+- [x] Integração com Ollama local sem chave de API
+- [x] Síntese e reconhecimento de voz do navegador, quando disponíveis
 - [ ] Memória persistente com controles de privacidade
-- [ ] Chamadas de voz em tempo real
-- [ ] Aplicativo instalável/PWA
+- [ ] Controle seguro do desktop Linux
+- [ ] Voz em tempo real
+- [ ] Aplicativo instalável/AppImage
 
-**Importante:** as respostas atuais são demonstrativas e locais. O coração representa emoções simuladas; não significa que a IA tenha sentimentos ou consciência. O botão Ligar indica uma funcionalidade planejada; chamadas reais ainda não estão implementadas.
+O coração representa emoções simuladas; não significa que a IA tenha sentimentos ou consciência. O botão Ligar ainda não realiza chamadas.
 
-## Rodar localmente
-Requer Node.js 20 ou superior.
+## Requisitos
+
+- Node.js 20 ou superior
+- Ollama instalado e um modelo baixado (configuração inicial: `qwen2.5:1.5b`)
+
+## Iniciar no CachyOS
+
+**Terminal 1 — iniciar o modelo local:**
+
+```bash
+ollama run qwen2.5:1.5b
+```
+
+**Terminal 2 — iniciar a API:**
+
+```bash
+cd server
+npm install
+cp .env.example .env
+npm run dev
+```
+
+**Terminal 3 — iniciar a interface:**
 
 ```bash
 npm install
 npm run dev
 ```
 
-## Build
+Abra o endereço local mostrado pelo Vite (normalmente `http://localhost:5173`). O backend usa `http://127.0.0.1:8787`; o endpoint `/api/health` informa se o servidor está ativo e se o modelo foi configurado.
+
+## Build da interface
+
 ```bash
 npm run build
 ```
 
-## Segurança
-Nunca coloque chaves de API, tokens ou senhas no frontend ou no Git. A futura integração com IA será feita por backend, usando variáveis de ambiente e validação no servidor.
+## Segurança e privacidade
+
+- O modelo roda localmente via Ollama; não é necessária chave de API para essa configuração.
+- Se usar um provedor online, mantenha a chave apenas no arquivo `.env` do servidor, nunca no frontend ou no Git.
+- A API escuta somente em `127.0.0.1` e limita origem, tamanho e quantidade das mensagens.
+- Nesta versão, a Roxy não executa comandos, não controla o desktop e não mantém memória persistente.
+- Não exponha o backend diretamente à internet sem autenticação, TLS e controles adicionais.
 
 ## Próximas etapas
-1. Criar backend e endpoint de conversa.
-2. Conectar o modelo de IA e definir a personalidade da Roxy.
-3. Implementar memória com consentimento, exportação e exclusão.
-4. Adicionar voz em tempo real.
-5. Avaliar provedor de telefonia para chamadas reais.
+
+1. Testar integração no CachyOS.
+2. Adicionar memória local com consentimento, exportação e exclusão.
+3. Adicionar ferramentas do desktop com permissões e confirmação explícita.
+4. Melhorar voz e acessibilidade.
+5. Preparar e testar o pacote AppImage.
