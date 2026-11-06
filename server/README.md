@@ -1,42 +1,45 @@
 # Roxy API
 
-Backend inicial para conectar a interface da Roxy a um provedor de IA compatível com a API de chat completions.
+Backend local da Roxy com suporte ao Ollama e a provedores compatíveis com a API OpenAI Chat Completions.
 
 ## Requisitos
 
 - Node.js 20 ou superior
-- Uma chave de API de um provedor compatível
+- Ollama instalado e modelo baixado (padrão: `qwen2.5:1.5b`)
 
-## Configuração
+## Configuração local sem chave de API
+
+Na raiz do repositório, inicie o modelo:
+
+```bash
+ollama run qwen2.5:1.5b
+```
+
+Em outro terminal:
 
 ```bash
 cd server
 npm install
 cp .env.example .env
-```
-
-Edite `.env` e configure `AI_API_KEY`, `AI_MODEL` e, se necessário, `AI_BASE_URL`. A chave fica somente no servidor; nunca a coloque no React ou em arquivos versionados.
-
-## Executar
-
-```bash
 npm run dev
 ```
 
-A API fica em `http://127.0.0.1:8787`. Verifique `GET /api/health` e envie `POST /api/chat` com JSON no formato:
+O arquivo de exemplo já aponta para o Ollama em `http://127.0.0.1:11434/v1`. Se necessário, altere `AI_MODEL` no arquivo `.env`. Não é preciso configurar `AI_API_KEY` para um provedor local.
 
-```json
-{
-  "messages": [
-    { "role": "user", "content": "Oi, Roxy!" }
-  ]
-}
-```
+## Provedor online opcional
 
-## Limites de segurança desta primeira etapa
+Configure `AI_BASE_URL`, `AI_MODEL` e `AI_API_KEY` no arquivo `.env`. Nunca coloque a chave no frontend nem a versione no Git.
+
+## API
+
+- `GET /api/health`: estado do servidor e configuração do provedor.
+- `POST /api/chat`: recebe `{ "messages": [{ "role": "user", "content": "Oi, Roxy!" }] }` e retorna `{ "reply": "..." }`.
+
+## Segurança e limites
 
 - CORS limitado à origem configurada em `ROXY_WEB_ORIGIN`.
 - Corpo JSON limitado a 64 KB; até 20 mensagens e 8.000 caracteres por mensagem.
-- A chave do provedor nunca é enviada ao navegador.
-- Sem execução de comandos, acesso a arquivos ou memória persistente nesta etapa.
-- A API escuta somente em `127.0.0.1`; não a exponha diretamente à internet sem autenticação, TLS e controles adicionais.
+- Chaves de provedores online são mantidas no servidor.
+- O backend escuta somente em `127.0.0.1`.
+- Ainda não executa comandos, acessa arquivos ou mantém memória persistente.
+- Não exponha o backend diretamente à internet sem autenticação, TLS e controles adicionais.
