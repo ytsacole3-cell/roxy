@@ -6,7 +6,7 @@ type ApiMessage = { role: 'user' | 'assistant'; content: string };
 declare global { interface Window { SpeechRecognition?: any; webkitSpeechRecognition?: any } }
 
 const welcome: Message = { id: 1, from: 'roxy', text: 'Oii! Eu sou a Roxy 💗 Meu cérebro está conectado ao modelo de IA configurado no seu computador. Pode conversar comigo!' };
-const API_URL = import.meta.env.VITE_ROXY_API_URL ?? 'http://127.0.0.1:8787';
+const API_URL = 'http://127.0.0.1:8787';
 
 export default function App() {
  const [messages, setMessages] = useState<Message[]>([welcome]);
